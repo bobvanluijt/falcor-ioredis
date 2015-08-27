@@ -1,6 +1,6 @@
 'use strict';
 /**
- * ELSIO CATALOG SERVER ROUTER
+ * falcor-ioredis
  * Author: Bob van Luijt <@bobvanluijt>
  */
 var Router = require('falcor-router'),
