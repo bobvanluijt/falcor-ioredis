@@ -1,0 +1,104 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish', './' ]
+2 info using npm@2.12.0
+3 info using node@v0.10.32
+4 verbose publish [ './' ]
+5 silly cache add args [ './', null ]
+6 verbose cache add spec ./
+7 silly cache add parsed spec { raw: './',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: './',
+7 silly cache add   spec: '/Users/bobvanluijt/Documents/GitTower/falcor-ioredis',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/bobvanluijt/.npm/falcor-ioredis/0.0.1/package.tgz not in flight; packing
+9 verbose tar pack [ '/Users/bobvanluijt/.npm/falcor-ioredis/0.0.1/package.tgz',
+9 verbose tar pack   '/Users/bobvanluijt/Documents/GitTower/falcor-ioredis' ]
+10 verbose tarball /Users/bobvanluijt/.npm/falcor-ioredis/0.0.1/package.tgz
+11 verbose folder /Users/bobvanluijt/Documents/GitTower/falcor-ioredis
+12 info prepublish falcor-ioredis@0.0.1
+13 verbose addLocalTarball adding from inside cache /Users/bobvanluijt/.npm/falcor-ioredis/0.0.1/package.tgz
+14 silly cache afterAdd falcor-ioredis@0.0.1
+15 verbose afterAdd /Users/bobvanluijt/.npm/falcor-ioredis/0.0.1/package/package.json not in flight; writing
+16 verbose afterAdd /Users/bobvanluijt/.npm/falcor-ioredis/0.0.1/package/package.json written
+17 silly publish { name: 'falcor-ioredis',
+17 silly publish   version: '0.0.1',
+17 silly publish   description: 'Using the Falcor-router to retrieve the model from Redis.',
+17 silly publish   main: 'index.js',
+17 silly publish   dependencies:
+17 silly publish    { 'body-parser': '^1.13.3',
+17 silly publish      express: '^4.13.3',
+17 silly publish      'falcor-express': '^0.1.2',
+17 silly publish      'falcor-json-graph': '^1.1.5',
+17 silly publish      'falcor-router': '^0.2.9',
+17 silly publish      ioredis: '^1.7.5',
+17 silly publish      jshint: '^2.8.0' },
+17 silly publish   repository:
+17 silly publish    { type: 'git',
+17 silly publish      url: 'git+https://github.com/kubrickology/falcor-ioredis.git' },
+17 silly publish   author: { name: 'Bob van Luijt', url: 'http://kubrickolo.gy' },
+17 silly publish   licenses:
+17 silly publish    [ { type: 'Apache License, Version 2.0',
+17 silly publish        url: 'http://www.apache.org/licenses/LICENSE-2.0.html' } ],
+17 silly publish   bugs: { url: 'https://github.com/kubrickology/falcor-ioredis/issues' },
+17 silly publish   homepage: 'https://github.com/kubrickology/falcor-ioredis/blob/master/README.md',
+17 silly publish   devDependencies: {},
+17 silly publish   directories: { example: 'example' },
+17 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+17 silly publish   license: 'ISC',
+17 silly publish   readme: '# falcor-ioredis\nFalcor router combined with ioredis\n',
+17 silly publish   readmeFilename: 'README.md',
+17 silly publish   gitHead: 'e1d4d59c8d94134f56a8635d52b3a6d2bacc62ce',
+17 silly publish   _id: 'falcor-ioredis@0.0.1',
+17 silly publish   _shasum: '2f526068d38afc243bfe25aac1d16f23c6a60876',
+17 silly publish   _from: '.' }
+18 verbose getPublishConfig undefined
+19 silly mapToRegistry name falcor-ioredis
+20 silly mapToRegistry using default registry
+21 silly mapToRegistry registry https://registry.npmjs.org/
+22 silly mapToRegistry uri https://registry.npmjs.org/falcor-ioredis
+23 verbose publish registryBase https://registry.npmjs.org/
+24 silly publish uploading /Users/bobvanluijt/.npm/falcor-ioredis/0.0.1/package.tgz
+25 verbose request uri https://registry.npmjs.org/falcor-ioredis
+26 verbose request sending authorization for write operation
+27 info attempt registry request try #1 at 12:13:14
+28 verbose request using bearer token for auth
+29 verbose request id 7f9575d42696a23f
+30 http request PUT https://registry.npmjs.org/falcor-ioredis
+31 http 403 https://registry.npmjs.org/falcor-ioredis
+32 verbose headers { 'content-type': 'application/json',
+32 verbose headers   'cache-control': 'max-age=60',
+32 verbose headers   'content-length': '95',
+32 verbose headers   'accept-ranges': 'bytes',
+32 verbose headers   date: 'Thu, 27 Aug 2015 10:12:49 GMT',
+32 verbose headers   via: '1.1 varnish',
+32 verbose headers   connection: 'keep-alive',
+32 verbose headers   'x-served-by': 'cache-ams4120-AMS',
+32 verbose headers   'x-cache': 'MISS',
+32 verbose headers   'x-cache-hits': '0',
+32 verbose headers   'x-timer': 'S1440670368.638790,VS0,VE965' }
+33 verbose request invalidating /Users/bobvanluijt/.npm/registry.npmjs.org/falcor-ioredis on PUT
+34 error publish Failed PUT 403
+35 verbose stack Error: "You cannot publish over the previously published version 0.0.1." : falcor-ioredis
+35 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:247:14)
+35 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:170:14)
+35 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:197:22)
+35 verbose stack     at Request.emit (events.js:98:17)
+35 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1050:14)
+35 verbose stack     at Request.emit (events.js:117:20)
+35 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:996:12)
+35 verbose stack     at IncomingMessage.emit (events.js:117:20)
+35 verbose stack     at _stream_readable.js:943:16
+35 verbose stack     at process._tickCallback (node.js:419:13)
+36 verbose statusCode 403
+37 verbose pkgid falcor-ioredis
+38 verbose cwd /Users/bobvanluijt/Documents/GitTower/falcor-ioredis
+39 error Darwin 14.5.0
+40 error argv "node" "/usr/local/bin/npm" "publish" "./"
+41 error node v0.10.32
+42 error npm  v2.12.0
+43 error code E403
+44 error "You cannot publish over the previously published version 0.0.1." : falcor-ioredis
+45 error If you need help, you may report this error at:
+45 error     <https://github.com/npm/npm/issues>
+46 verbose exit [ 1, true ]
