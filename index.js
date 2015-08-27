@@ -1,28 +1,52 @@
 'use strict';
 /**
- * ELSIO CATALOG SERVER
- * Author: Bob van Luijt <bob.vanluijt@elsevier.io>
+ * ELSIO CATALOG SERVER ROUTER
+ * Author: Bob van Luijt <@bobvanluijt>
  */
-var express = require('express'),
-	bodyParser = require('body-parser'),
-	app = express(),
-	FalcorServer = require('falcor-express'),
-	Router = require('falcor-router'),
-	jsonGraph = require('falcor-json-graph'),
-	FalcorIoredis = require('falcor-ioredis');
+var Router = require('falcor-router'),
+    Ioredis = require('ioredis'),
+    jsonGraph = require('falcor-json-graph'),
+    $ref = jsonGraph.ref,
+    $error = jsonGraph.error;
 
-app.use(bodyParser.urlencoded({ extended: false }));
+class FalcorIoredis extends
 
-app.use('/model.json', FalcorServer.dataSourceRoute(function(req, res) {
-    return new FalcorIoredis('redis://explorer004.timkyf.0001.euw1.cache.amazonaws.com:6379');    
-}));
-
-app.use(express.static('.'));
-
-var server = app.listen(80, function(err) {
-    if (err) {
-        console.error(err);
-        return;
+    Router.createClass([
+    {
+        route: '[{keys}][{integers:indices}][{keys}]',
+        get: function (jsonGraphArg) {
+            var Redis = new Ioredis(this.redisHost);
+            var uidKey = jsonGraphArg[0].toString();
+            if(jsonGraphArg[0].toString().substring(0,1) === '_'){ //if the requested key is private, return error
+                return {
+                            path: [jsonGraphArg[0], jsonGraphArg[1], jsonGraphArg[2][0]],
+                            value: {
+                                path: [jsonGraphArg[0], jsonGraphArg[1], jsonGraphArg[2][0]],
+                                value: $error('No private keys allowed (keys that are prefixed with _ )')
+                            }
+                        };
+            } else {
+                /**
+                 * Request the exact path from REDIS.
+                 */
+                return Redis.
+                            hget(jsonGraphArg[0], jsonGraphArg[1]).
+                            then(function(result){
+                                result = JSON.
+                                            parse(result);
+                                return {
+                                    path: [jsonGraphArg[0], jsonGraphArg[1], jsonGraphArg[2][0]],
+                                    value: result[jsonGraphArg[2][0]]
+                                };
+                            });
+            }
+        }
     }
-    console.log('navigate to http://localhost:80');
-});
+]) {
+    constructor(redisHost) {
+        super();
+        this.redisHost = redisHost;
+    }
+}
+
+module.exports = FalcorIoredis;
