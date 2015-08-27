@@ -9,12 +9,12 @@ var express = require('express'),
 	FalcorServer = require('falcor-express'),
 	Router = require('falcor-router'),
 	jsonGraph = require('falcor-json-graph'),
-	ElsioRouter = require('falcor-ioredis.js');
+	FalcorIoredis = require('falcor-ioredis');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/model.json', FalcorServer.dataSourceRoute(function(req, res) {
-    return new FalcorIoredis();    
+    return new FalcorIoredis('redis://localhost:6379');    
 }));
 
 app.use(express.static('.'));
