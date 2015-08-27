@@ -14,10 +14,6 @@ $ npm install falcor-ioredis
 
 ```js
 'use strict';
-/**
- * Example
- * Author: Bob van Luijt @bobvanluijt
- */
 var express = require('express'),
 	bodyParser = require('body-parser'),
 	FalcorServer = require('falcor-express'),
