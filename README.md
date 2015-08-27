@@ -44,7 +44,6 @@ var server = app.listen(8080, function(err) {
 ## Roadmap and todos
 - Accept setting of value
 - Accept get arrays
-- 
 
 ## How does it work?
 Json Graph example:
