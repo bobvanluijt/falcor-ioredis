@@ -9,7 +9,7 @@ var express = require('express'),
 	FalcorServer = require('falcor-express'),
 	Router = require('falcor-router'),
 	jsonGraph = require('falcor-json-graph'),
-	ElsioRouter = require('falcor-ioredis');
+	FalcorIoredis = require('falcor-ioredis');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
