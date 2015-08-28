@@ -7,7 +7,7 @@ var Router = require('falcor-router'),
     Ioredis = require('ioredis'),
     jsonGraph = require('falcor-json-graph'),
     $ref = jsonGraph.ref,
-    $error = jsonGraph.error;
+    $error = jsonGraph.error;            
 
 class FalcorIoredis extends
 
@@ -29,16 +29,29 @@ class FalcorIoredis extends
                 /**
                  * Request the exact path from REDIS.
                  */
-                return Redis.
-                            hget(jsonGraphArg[0], jsonGraphArg[1]).
-                            then(function(result){
-                                result = JSON.
-                                            parse(result);
-                                return {
-                                    path: [jsonGraphArg[0], jsonGraphArg[1], jsonGraphArg[2][0]],
-                                    value: result[jsonGraphArg[2][0]]
-                                };
-                            });
+                if(typeof jsonGraphArg[2][0]=='undefined') {
+                    return Redis.
+                                hget(jsonGraphArg[0], jsonGraphArg[1]).
+                                then(function(result){
+                                    result = JSON.
+                                                parse(result);
+                                    return {
+                                        path: [jsonGraphArg[0], jsonGraphArg[1]],
+                                        value: result
+                                    };
+                                });
+                } else {
+                    return Redis.
+                                hget(jsonGraphArg[0], jsonGraphArg[1]).
+                                then(function(result){
+                                    result = JSON.
+                                                parse(result);
+                                    return {
+                                        path: [jsonGraphArg[0], jsonGraphArg[1], jsonGraphArg[2][0]],
+                                        value: result[jsonGraphArg[2][0]]
+                                    };
+                                });
+                }
             }
         }
     }
@@ -49,4 +62,4 @@ class FalcorIoredis extends
     }
 }
 
-module.exports = FalcorIoredis;
+module.exports = FalcorIoredis
