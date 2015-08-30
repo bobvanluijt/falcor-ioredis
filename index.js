@@ -29,7 +29,7 @@ class FalcorIoredis extends
                 /**
                  * Request the exact path from REDIS.
                  */
-                if(typeof jsonGraphArg[2][0]=='undefined') {
+                if(typeof jsonGraphArg[2][0]==='undefined') {
                     return Redis.
                                 hget(jsonGraphArg[0], jsonGraphArg[1]).
                                 then(function(result){
@@ -62,4 +62,4 @@ class FalcorIoredis extends
     }
 }
 
-module.exports = FalcorIoredis
+module.exports = FalcorIoredis;
