@@ -1,10 +1,21 @@
 language: node_js
+
 node_js:
-- '0.12'
+  - 'iojs'
+  
+branches:
+    only:
+        - master
+        - develop
+  
 install:
 - npm install
+
 script:
 - jshint *.js
+
+before_install: npm update -g npm
+
 notifications:
-  slack:
-    secure: VJwOwAs36LCMvQdoY/dyIwSVfnTBJ9ygi6j5DjxPCvscEuBoSDJghSzB4zEtV33lVduOkxnAw8cXhc0V07/sOwzApdVxQP8XMEUuTOUHmefRef9Yv8/tESq5n5+315ApvLfLfB7COzb12mW3YNwU3PLHxYnw65JEcKjAX5zJ6Iv+83/H5wYm/AQwRGE4kxk2pN09Nti1dVHrpNR5uWWo5naUREzlyHaJgMDDr/28R77lGZf8J8uxZw0UZUTUJ1PceIqMfeQg+4DFBDO7+Yna7Vs8kB/asB7xihbdw2yqxu/b4uMmGIbI8GsrABKtyi/uqwdOfFdh8x6wm1PPBcd5EW3oV4XER7caUfT5b2qNeXg3rXkH2/YrgPxBw0/pO4rpXM6qwSrt1NlWaZ3VvDJPW0NDzimwOSddX7ydmtAR56gQ1sgGWAfMGQay4f1Mlzic/ovHBLtJi34Q1DpFBQIn+e4GBKumNIgSCkZP/cuUoOtMrMKT3SS+tqqE49tkdy8Y0dq0pq5GCZYJ2/WYoLIVYEUnVIF2FTDP/syWrCRKaVHpLRYiFVii/WrEPmUTCpKDP3yIEuuNNW3l/XdmT76Uz/1Wi6zHKU95x2LsKDTuZxAojbTkgmz7o6JHprJMcdbmGdrXk2DWtI5Kr/twEGNVYI3JatvCDsmZHF71b/7WVOc=
+    email:
+        bob@kubrickolo.gy

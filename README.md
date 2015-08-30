@@ -6,7 +6,7 @@
 ## What is this?
 Falcor-ioredis is a simple piece of middleware that uses the Falcor-router to sync with a JSON Graph stored in a Redis database.
 
-_note: this package is is still in version 0.0.x if you want to help _
+_note: this package is is still in version 0.0.x if you want to help, please fork an update _
 
 Useful links: [Falcor](http://netflix.github.io/falcor), [Ioredis](https://github.com/luin/ioredis)
 
@@ -92,9 +92,17 @@ HSET somethingById c '{0:{$type:"ref",value:"valuesById[a]"},1:{Foo:"Bar"},3:{0:
 HSET somethingById d '{$type:"ref",value:"valuesById[7]"}'
 ```
 
-Model request for: `//localhost/model.json?paths=[[%22somethingById%22,%22a%22,%22foor%22]]&method=get` will return:
+Model request for: `//localhost/model.json?paths=[[%22somethingById%22,%22a%22,%22foo%22]]&method=get` will return:
 ```json
-..example...
+{
+    "jsonGraph": {
+        "somethingById": {
+            "a": {
+                "foo": "bar"
+            }
+        }
+    }
+}
 ```
 
 # Private key values
