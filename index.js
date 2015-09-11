@@ -13,7 +13,7 @@ class FalcorIoredis extends
 
     Router.createClass([
     {
-        route: '[{keys}][{integers:indices}][{keys}]',
+        route: '[{keys}][{keys:indices}][{keys}]',
         get: function (jsonGraphArg) {
             var Redis = new Ioredis(this.redisHost);
             var uidKey = jsonGraphArg[0].toString();
