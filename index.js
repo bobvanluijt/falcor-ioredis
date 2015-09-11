@@ -3,11 +3,13 @@
  * falcor-ioredis
  * Author: Bob van Luijt <@bobvanluijt>
  */
-var Router = require('falcor-router'),
-    Ioredis = require('ioredis'),
+var Router    = require('falcor-router'),
+    Ioredis   = require('ioredis'),
     jsonGraph = require('falcor-json-graph'),
-    $ref = jsonGraph.ref,
-    $error = jsonGraph.error;        
+    $ref      = jsonGraph
+                    .ref,
+    $error    = jsonGraph
+                    .error;        
 
 class FalcorIoredis extends
 
@@ -33,7 +35,8 @@ class FalcorIoredis extends
                 var jsonGraphPath = new Array();
                 for(var i = 2; i<jsonGraphArg.length; i++){ // note how i = 2, it removes hashes used in redis lookup
                     if(typeof jsonGraphArg[i][0] !== 'undefined'){
-                        jsonGraphPath.push(jsonGraphArg[i]);
+                        jsonGraphPath.
+                            push(jsonGraphArg[i]);
                     }
                 }
 
@@ -43,7 +46,8 @@ class FalcorIoredis extends
                 var jsonGraphHashPath = new Array();
                 for(var i = 0; i<jsonGraphArg.length; i++){
                     if(typeof jsonGraphArg[i][0] !== 'undefined'){
-                        jsonGraphHashPath.push(jsonGraphArg[i]);
+                        jsonGraphHashPath.
+                            push(jsonGraphArg[i]);
                     }
                 }
 
@@ -82,8 +86,10 @@ class FalcorIoredis extends
 ]) {
     constructor(redisHost) {
         super();
-        this.redisHost = redisHost;
+        this.
+            redisHost = redisHost;
     }
 }
 
-module.exports = FalcorIoredis
+module.
+    exports = FalcorIoredis
