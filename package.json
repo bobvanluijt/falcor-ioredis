@@ -1,6 +1,6 @@
 {
   "name": "falcor-ioredis",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Using the Falcor-router to retrieve the model from Redis.",
   "main": "index.js",
   "dependencies": {
@@ -9,7 +9,7 @@
     "falcor-express": "^0.1.2",
     "falcor-json-graph": "^1.1.5",
     "falcor-router": "^0.2.9",
-    "ioredis": "^1.7.5",
+    "ioredis": "^1.8.0",
     "jshint": "^2.8.0"
   },
   "repository": {
