@@ -63,7 +63,7 @@ class FalcorIoredis extends
                                                         parse(result);
                                     
                                     if (typeof returnVal === 'undefined'){
-                                        returnVal = { '$type': 'error', 'value': 'This path does not exist in Redis' };
+                                        returnVal = $error('This path does not exist in Redis');
                                     }
                                                 
                                     return {
@@ -82,7 +82,7 @@ class FalcorIoredis extends
                                                 }, result);
                                                 
                                     if (typeof returnVal === 'undefined'){
-                                        returnVal = { '$type': 'error', 'value': 'This path does not exist in Redis' };
+                                        returnVal = $error('This path does not exist in Redis');
                                     }
                                     
                                     return {
