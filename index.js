@@ -59,11 +59,16 @@ class FalcorIoredis extends
                     return Redis.
                                 hget(jsonGraphArg[0], jsonGraphArg[1]).
                                 then(function(result){
-                                    result = JSON.
-                                                parse(result);
+                                    var returnVal = JSON.
+                                                        parse(result);
+                                    
+                                    if (typeof returnVal === 'undefined'){
+                                        returnVal = $error('This path does not exist in Redis');
+                                    }
+                                                
                                     return {
                                         path: [jsonGraphArg[0], jsonGraphArg[1]],
-                                        value: result
+                                        value: returnVal
                                     };
                                 });
                 } else {
@@ -75,6 +80,11 @@ class FalcorIoredis extends
                                     var returnVal = jsonGraphPath.reduce(function(obj, name) {
                                                     return obj[name];
                                                 }, result);
+                                                
+                                    if (typeof returnVal === 'undefined'){
+                                        returnVal = $error('This path does not exist in Redis');
+                                    }
+                                    
                                     return {
                                         path: jsonGraphHashPath,
                                         value: returnVal
