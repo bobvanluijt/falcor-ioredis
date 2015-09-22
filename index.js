@@ -61,6 +61,11 @@ class FalcorIoredis extends
                                 then(function(result){
                                     result = JSON.
                                                 parse(result);
+                                    
+                                    if (typeof returnVal === 'undefined'){
+                                        returnVal = { '$type': 'error', 'value': 'This path does not exist in Redis' };
+                                    }
+                                                
                                     return {
                                         path: [jsonGraphArg[0], jsonGraphArg[1]],
                                         value: result
@@ -75,6 +80,11 @@ class FalcorIoredis extends
                                     var returnVal = jsonGraphPath.reduce(function(obj, name) {
                                                     return obj[name];
                                                 }, result);
+                                                
+                                    if (typeof returnVal === 'undefined'){
+                                        returnVal = { '$type': 'error', 'value': 'This path does not exist in Redis' };
+                                    }
+                                    
                                     return {
                                         path: jsonGraphHashPath,
                                         value: returnVal
