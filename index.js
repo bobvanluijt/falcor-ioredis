@@ -59,8 +59,8 @@ class FalcorIoredis extends
                     return Redis.
                                 hget(jsonGraphArg[0], jsonGraphArg[1]).
                                 then(function(result){
-                                    returnVal = JSON.
-                                                parse(result);
+                                    var returnVal = JSON.
+                                                        parse(result);
                                     
                                     if (typeof returnVal === 'undefined'){
                                         returnVal = { '$type': 'error', 'value': 'This path does not exist in Redis' };
