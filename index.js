@@ -59,7 +59,7 @@ class FalcorIoredis extends
                     return Redis.
                                 hget(jsonGraphArg[0], jsonGraphArg[1]).
                                 then(function(result){
-                                    result = JSON.
+                                    returnVal = JSON.
                                                 parse(result);
                                     
                                     if (typeof returnVal === 'undefined'){
@@ -68,7 +68,7 @@ class FalcorIoredis extends
                                                 
                                     return {
                                         path: [jsonGraphArg[0], jsonGraphArg[1]],
-                                        value: result
+                                        value: returnVal
                                     };
                                 });
                 } else {
