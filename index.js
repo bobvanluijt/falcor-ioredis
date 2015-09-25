@@ -36,19 +36,12 @@ class FalcorIoredis extends
                 var jsonGraphPath = [];
                 for(var i = 2; i<jsonGraphArg.length; i++){ // note how i = 2, it removes hashes used in redis lookup
                     if(typeof jsonGraphArg[i][0] !== 'undefined'){
-                        jsonGraphPath.
-                            push(jsonGraphArg[i]);
-                    }
-                }
-
-                /** 
-                 * Create the json path with redis hash
-                 */
-                var jsonGraphHashPath = [];
-                for(var i2 = 0; i2<jsonGraphArg.length; i2++){
-                    if(typeof jsonGraphArg[i2][0] !== 'undefined'){
+                        if(i > 1){
+                            jsonGraphPath.
+                                push(jsonGraphArg[i]);
+                        }
                         jsonGraphHashPath.
-                            push(jsonGraphArg[i2]);
+                            push(jsonGraphArg[i]);
                     }
                 }
 
