@@ -85,7 +85,8 @@ class FalcorIoredis extends
 
                                                 var graphPathFull = [jsonGraphPathStepsResult['value'][0],
                                                                      jsonGraphPathStepsResult['value'][1]];
-                                                    graphPathFull = graphPathFull.concat(_jsonGraphPath.diff(jsonGraphPathSteps));
+                                                    graphPathFull = graphPathFull
+                                                                        .concat(_jsonGraphPath.diff(jsonGraphPathSteps));
 
                                                 return false;
                                         } else {
@@ -103,7 +104,7 @@ class FalcorIoredis extends
                                     return {
                                         path:  jsonGraphPathSteps,
                                         value: jsonGraphPathStepsResult
-                                    }
+                                    };
                                 });
                 }
             }
