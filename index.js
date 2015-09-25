@@ -23,10 +23,6 @@ var Router    = require('falcor-router'),
     $error    = jsonGraph
                     .error;
 
-
-var deepGraphResult_TEST = {'value':{'THIS':'IS A TEST'}};
-
-
 class FalcorIoredis extends
 
     Router.createClass([
@@ -49,7 +45,6 @@ class FalcorIoredis extends
             /**
              * Closure for request, this request repeats when $type ref is found
              */
-
             function redisRequest(_jsonGraphArg, _jsonGraphPath, _jsonGraphHashPath){
                 if(typeof _jsonGraphArg[2][0]==='undefined') {
                     return Redis.
@@ -88,7 +83,8 @@ class FalcorIoredis extends
 
                                         if(jsonGraphPathStepsResult['$type']==='ref'){
 
-                                                var graphPathFull = [jsonGraphPathStepsResult['value'][0], jsonGraphPathStepsResult['value'][1]];
+                                                var graphPathFull = [jsonGraphPathStepsResult['value'][0],
+                                                                     jsonGraphPathStepsResult['value'][1]];
                                                     graphPathFull = graphPathFull.concat(_jsonGraphPath.diff(jsonGraphPathSteps));
 
                                                 return false;
@@ -96,7 +92,7 @@ class FalcorIoredis extends
                                                 return true;
                                         }
 
-                                    })
+                                    });
 
                                     if (typeof jsonGraphPathStepsResult === 'undefined'){
                                         jsonGraphPathStepsResult = $error('This path does not exist in Redis');
