@@ -10,7 +10,8 @@
     "falcor-json-graph": "^1.1.5",
     "falcor-router": "^0.2.9",
     "ioredis": "^1.8.0",
-    "jshint": "^2.8.0"
+    "jshint": "^2.8.0",
+    "marked": "^0.3.5"
   },
   "repository": {
     "type": "git",
