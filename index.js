@@ -64,57 +64,56 @@ class FalcorIoredis extends
                                                                     });
                 } else {
                     return Redis.
-                                hget(_jsonGraphArg[0], _jsonGraphArg[1]).
-                                then(function(result){
+                        hget(_jsonGraphArg[0], _jsonGraphArg[1]).
+                        then(function(result){
 
-                                    result = JSON.
-                                                parse(result);
+                            result = JSON.
+                                        parse(result);
 
-                                    /**
-                                     * Loop through the path, if ref is found update returned value
-                                     */
-                                    var jsonGraphPathSteps = [],
-                                        jsonGraphPathStepsResult;
-                                    _jsonGraphPath.every(function(step){
-                                        jsonGraphPathSteps.push(step);
-                                        jsonGraphPathStepsResult = jsonGraphPathSteps.reduce(function(obj, name) {
-                                            return obj[name];
-                                        }, result);
+                            /**
+                             * Loop through the path, if ref is found update returned value
+                             */
+                            var jsonGraphPathSteps = [],
+                                jsonGraphPathStepsResult;
+                            _jsonGraphPath.every(function(step){
+                                jsonGraphPathSteps.push(step);
+                                jsonGraphPathStepsResult = jsonGraphPathSteps.reduce(function(obj, name) {
+                                    return obj[name];
+                                }, result);
 
-                                        if(jsonGraphPathStepsResult['$type']==='ref'){
+                                if(jsonGraphPathStepsResult['$type']==='ref'){
 
-                                            var graphPathFull = [jsonGraphPathStepsResult['value'][0],
-                                                                 jsonGraphPathStepsResult['value'][1]];
-                                                graphPathFull = graphPathFull
-                                                                    .concat(_jsonGraphPath
-                                                                        .diff(jsonGraphPathSteps));
+                                    var graphPathFull = [jsonGraphPathStepsResult['value'][0],
+                                                         jsonGraphPathStepsResult['value'][1]];
+                                        graphPathFull = graphPathFull
+                                                            .concat(_jsonGraphPath
+                                                                .diff(jsonGraphPathSteps));
 
-                                                return false;
-                                        } else {
-                                                return true;
-                                        }
+                                        return false;
+                                } else {
+                                        return true;
+                                }
 
-                                    });
+                            });
 
-                                    if (typeof jsonGraphPathStepsResult === 'undefined'){
-                                        jsonGraphPathStepsResult = $error('This path does not exist in Redis');
-                                    }
+                            if (typeof jsonGraphPathStepsResult === 'undefined'){
+                                jsonGraphPathStepsResult = $error('This path does not exist in Redis');
+                            }
 
-                                    jsonGraphPathSteps.unshift(_jsonGraphArg[0], _jsonGraphArg[1]);
+                            jsonGraphPathSteps.unshift(_jsonGraphArg[0], _jsonGraphArg[1]);
 
-                                    /**
-                                     * array with single value, return as string
-                                     */
-                                    if(typeof jsonGraphPathStepsResult === 'object'
-                                        && jsonGraphPathStepsResult.length === 1){
-                                        jsonGraphPathStepsResult = jsonGraphPathStepsResult[0];
-                                    }
+                            /**
+                             * array with single value, return as string
+                             */
+                            if(typeof jsonGraphPathStepsResult === 'object' && jsonGraphPathStepsResult.length === 1){
+                                jsonGraphPathStepsResult = jsonGraphPathStepsResult[0];
+                            }
 
-                                    return {
-                                        path:  jsonGraphPathSteps,
-                                        value: jsonGraphPathStepsResult
-                                    };
-                                });
+                            return {
+                                path:  jsonGraphPathSteps,
+                                value: jsonGraphPathStepsResult
+                            };
+                        });
                 }
             }
 
