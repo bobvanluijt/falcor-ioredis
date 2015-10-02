@@ -105,7 +105,8 @@ class FalcorIoredis extends
                                     /**
                                      * array with single value, return as string
                                      */
-                                    if(typeof jsonGraphPathStepsResult === 'object' && jsonGraphPathStepsResult.length === 1){
+                                    if(typeof jsonGraphPathStepsResult === 'object'
+                                        && jsonGraphPathStepsResult.length === 1){
                                         jsonGraphPathStepsResult = jsonGraphPathStepsResult[0];
                                     }
 
