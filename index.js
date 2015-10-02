@@ -100,7 +100,14 @@ class FalcorIoredis extends
                                         jsonGraphPathStepsResult = $error('This path does not exist in Redis');
                                     }
 
-                                        jsonGraphPathSteps.unshift(_jsonGraphArg[0], _jsonGraphArg[1]);
+                                    jsonGraphPathSteps.unshift(_jsonGraphArg[0], _jsonGraphArg[1]);
+
+                                    /**
+                                     * array with single value, return as string
+                                     */
+                                    if(typeof jsonGraphPathStepsResult === 'object' && jsonGraphPathStepsResult.length === 1){
+                                        jsonGraphPathStepsResult = jsonGraphPathStepsResult[0];
+                                    }
 
                                     return {
                                         path:  jsonGraphPathSteps,
