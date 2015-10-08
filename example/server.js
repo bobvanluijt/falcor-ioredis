@@ -1,26 +1,31 @@
 'use strict';
 /**
- * Example
- * Author: Bob van Luijt @bobvanluijt
+ * ELSIO CATALOG SERVER
+ * Author: Bob van Luijt <bob.vanluijt@elsevier.io>
  */
-var express = require('express'),
-	bodyParser = require('body-parser'),
-	FalcorServer = require('falcor-express'),
-	FalcorIoredis = require('falcor-ioredis'),
-	app = express(),
+var EXPRESS         = require('express'),
+    FALCORIOREDIS   = require('falcor-ioredis'),
+    FALCORSERVER    = require('falcor-express'),
+    FALCOR          = require('falcor'),
+    EXPRESS         = require('express'),
+    APP             = EXPRESS();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+APP
+    .use('/', function(req, res){
+        new FALCORIOREDIS('redis://localhost:6379', req, function(resultModel){
+            var falcorModel = new FALCOR
+                                    .Model(resultModel) ;
+            var outcome = FALCORSERVER
+                            .dataSourceRoute(function(req, res) {
+                                return  falcorModel
+                                            .asDataSource();
+                            });
+            outcome(req,res);
+        });
+    });
 
-app.use('/model.json', FalcorServer.dataSourceRoute(function(req, res) {
-    return new FalcorIoredis('redis://localhost:6379');    
-}));
-
-app.use(express.static('.'));
-
-var server = app.listen(8080, function(err) {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    console.log('navigate to http://localhost:8080');
-});
+var server = APP
+                .listen(8080, function(err) {
+                    if (err) console.error(err);
+                    console.log('JSON graph available on http://localhost:80');
+                });

@@ -4,11 +4,12 @@
 [![Build Status](https://travis-ci.org/kubrickology/falcor-ioredis.svg)](https://travis-ci.org/kubrickology/falcor-ioredis)
 
 ## What is this?
-Falcor-ioredis is a simple piece of middleware that uses the Falcor-router to sync with a JSON Graph stored in a Redis database.
-
-_note: this package is is still in version 0.0.x if you want to help, please fork an update _
+Falcor-ioredis is a simple piece of middleware that uses the Falcor-model to sync with a JSON Graph stored in a Redis database.
 
 Useful links: [Falcor](http://netflix.github.io/falcor), [Ioredis](https://github.com/luin/ioredis)
+
+## Todo
+- Follow references in redis requests
 
 ## Installation
 
@@ -18,92 +19,89 @@ $ npm install falcor-ioredis
 
 ```js
 'use strict';
-var express = require('express'),
-	bodyParser = require('body-parser'),
-	FalcorServer = require('falcor-express'),
-	FalcorIoredis = require('falcor-ioredis'),
-	app = express(),
+/**
+ * ELSIO CATALOG SERVER
+ * Author: Bob van Luijt <bob.vanluijt@elsevier.io>
+ */
+var EXPRESS         = require('express'),
+    FALCORIOREDIS   = require('falcor-ioredis'),
+    FALCORSERVER    = require('falcor-express'),
+    FALCOR          = require('falcor'),
+    EXPRESS         = require('express'),
+    APP             = EXPRESS();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+APP
+    .use('/', function(req, res){
+        new FALCORIOREDIS('redis://localhost:6379', req, function(resultModel){
+            var falcorModel = new FALCOR
+                                    .Model(resultModel) ;
+            var outcome = FALCORSERVER
+                            .dataSourceRoute(function(req, res) {
+                                return  falcorModel
+                                            .asDataSource();
+                            });
+            outcome(req,res);
+        });
+    });
 
-app.use('/model.json', FalcorServer.dataSourceRoute(function(req, res) {
-    return new FalcorIoredis('redis://localhost:6379');    
-}));
-
-app.use(express.static('.'));
-
-var server = app.listen(8080, function(err) {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    console.log('navigate to http://localhost:8080');
-});
+var server = APP
+                .listen(8080, function(err) {
+                    if (err) console.error(err);
+                    console.log('JSON graph available on http://localhost:80');
+                });
 ```
-
-## Roadmap and todos
-- Accept setting of value
-- Accept get arrays
 
 ## How does it work?
 Json Graph example:
 ```js
 {
-    somethingById: {
-        a: {
-            foo: "bar"
+    "somethingById": {
+        "a": {
+            "foo": "bar"
         },
-        b: {
-            foo: {
-                $type: "ref",
-                value: "valuesById[a]"
-            }
-        },
-        c: {
-            0: {
-                $type: "ref",
-                value: "valuesById[a]"
-            },
-            1: {
-                Foo: "Bar"
-            },
-            3: {
-                0: {
-                    foo: "baz"
-                },
-                1: {
-                    foo: "quux"
-                }
+        "b": {
+            "foo": {
+                "$type": "ref",
+                "value": "valuesById[c]"
             }
         }
     },
-    d: {
-        $type: "ref",
-        value: "valuesById[7]"
+    "valuesById": {
+        "c": {
+            "foo": "baz"
+        }
     }
 }
 ```
 
 The above example will be stored like this in Redis:
 ```bash
-HSET somethingById a '{foo:"bar"}'
-HSET somethingById b '{foo:{$type:"ref",value:"valuesById[a]"}}'
-HSET somethingById c '{0:{$type:"ref",value:"valuesById[a]"},1:{Foo:"Bar"},3:{0:{foo:"baz"},1:{foo:"quux"}}}'
-HSET somethingById d '{$type:"ref",value:"valuesById[7]"}'
+HSET somethingById a '{"foo":{$type:"ref","value":"valuesById[a]"}}'
+HSET somethingById b '{"foo":{"$type":"ref","value":"valuesById[c]"}}'
+HSET valuesById c '{"foo":"baz"}'
 ```
 
-Model request for: `//localhost/model.json?paths=[[%22somethingById%22,%22a%22,%22foo%22]]&method=get` will return:
+Model request for: `//localhost/?paths=[["somethingById","a","foo"]]&method=get` will return:
 ```json
 {
     "jsonGraph": {
         "somethingById": {
             "a": {
-                "foo": "bar"
+                "foo": {
+                    "$type": "atom",
+                    "value": "bar",
+                    "$modelCreated": true,
+                    "$size": 3
+                }
             }
         }
-    }
+    },
+    "paths": [
+        [
+            "somethingById",
+            "a",
+            "foo"
+        ]
+    ]
 }
 ```
-
-# Private key values
-Private keys start with a underscore, keys with underscores will be ignored. (used for custom frontend keys)
