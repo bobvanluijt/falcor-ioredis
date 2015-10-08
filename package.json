@@ -4,10 +4,11 @@
   "description": "Using the Falcor-router to retrieve the model from Redis.",
   "main": "index.js",
   "dependencies": {
-    "falcor-json-graph": "^2.0.0",
     "falcor": "^0.1.13",
+    "falcor-json-graph": "^2.0.0",
     "ioredis": "^1.9.1",
-    "jshint": "^2.8.0"
+    "jshint": "^2.8.0",
+    "underscore": "^1.8.3"
   },
   "repository": {
     "type": "git",
