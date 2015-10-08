@@ -13,7 +13,6 @@ if (!Object.assign) {
         configurable: true,
         writable: true,
         value: function(target) {
-            'use strict';
             if (target === undefined || target === null) {
                 throw new TypeError('Cannot convert first argument to object');
             }
@@ -78,8 +77,12 @@ class FalcorIoredis {
             return  redis
                         .hget(hashItemA, hashItemB)
                         .then(function(result){
-                            if(typeof falcorModelJson['cache'] === 'undefined') falcorModelJson['cache'] = {};
-                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined') falcorModelJson['cache'][hashItemA] = {};
+                            if(typeof falcorModelJson['cache'] === 'undefined'){
+                                falcorModelJson['cache'] = {};
+                            }
+                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined'){
+                                falcorModelJson['cache'][hashItemA] = {};
+                            }
                             falcorModelJson['cache'][hashItemA][hashItemB] = JSON.parse(result);
 
                             hashRequestCount++;
@@ -96,7 +99,7 @@ class FalcorIoredis {
             return a
                 .filter(function(x) {
                     return !seen.has(x) && seen.add(x);
-                })
+                });
         }
 
         function findElements(element){
