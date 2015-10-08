@@ -4,12 +4,10 @@
 [![Build Status](https://travis-ci.org/kubrickology/falcor-ioredis.svg)](https://travis-ci.org/kubrickology/falcor-ioredis)
 
 ## What is this?
-Falcor-ioredis is a simple piece of middleware that uses the Falcor-model to sync with a JSON Graph stored in a Redis database.
+Falcor-ioredis is a simple piece of middleware that uses the Falcor-model to sync with a JSON Graph stored in a Redis database. If references are found, redis will be queried automatically for the references.
 
 Useful links: [Falcor](http://netflix.github.io/falcor), [Ioredis](https://github.com/luin/ioredis)
 
-## Todo
-- Follow references in redis requests
 
 ## Installation
 

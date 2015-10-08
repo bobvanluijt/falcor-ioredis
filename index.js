@@ -14,7 +14,6 @@ if (!Object.assign) {
             configurable: true,
             writable: true,
             value: function(target) {
-                'use strict';
                 if (target === undefined || target === null) {
                     throw new TypeError('Cannot convert first argument to object');
                 }
@@ -26,7 +25,6 @@ if (!Object.assign) {
                       continue;
                     }
                     nextSource = Object(nextSource);
-
                     var keysArray = Object
                                         .keys(nextSource);
                     for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
@@ -62,44 +60,76 @@ class FalcorIoredis {
         /**
          * Define variables
          */
-        var redisPathsAll   = [],
+        var redisPathsAll        = [],
             redisPathsSorted,
-            i               = 0,
+            i                    = 0,
             firstElement,
-            redis           = new IOREDIS(redisHost),
-            falcorModelJson = {},
-            hashRequestCount= 0;
+            redis                = new IOREDIS(redisHost),
+            falcorModelJson      = {},
+            hashRequestCount     = 0,
+            refItterations       = 0,
+            maxRefItterations    = 1500,
+            redisPathsSortedRefs = [];
 
         /**
          * Define closures
          */
         function findReferences(obj, key) {
-            if (_.has(obj, key)) return [obj];
-            return _.flatten(_.map(obj, function(v) {
-                return typeof v == "object" ? findReferences(v, key) : [];
-            }), true);
+            let res = [];
+            if (_.has(obj, key)){
+                return [obj];
+            }
+            _.forEach(obj, function(v) {
+                if (typeof v === 'object' && (v = findReferences(v, key)).length){
+                    res
+                        .push
+                        .apply(res, v);
+                }
+            });
+            return res;
         }
 
         function redisRequest(hashItem){
             let hashItems = hashItem
                                 .split(' '),
                 hashItemA = hashItems[0],
-                hashItemB = hashItems[1];
+                hashItemB = hashItems[1],
+                references,
+                hashLocationRef,
+                fetchedAll = true;
 
             return  redis
                         .hget(hashItemA, hashItemB)
                         .then(function(result){
-                            if(typeof falcorModelJson['cache'] === 'undefined') falcorModelJson['cache'] = {};
-                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined') falcorModelJson['cache'][hashItemA] = {};
-                            falcorModelJson['cache'][hashItemA][hashItemB] = JSON
-                                                                                .parse(result);
-
-                            hashRequestCount++;
-
-                            if(hashRequestCount === redisPathsSorted.length){
-                                callback(falcorModelJson);
+                            result = JSON.parse(result);
+                            if(typeof falcorModelJson['cache'] === 'undefined'){
+                                falcorModelJson['cache'] = {};
                             }
-                            
+                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined'){
+                                falcorModelJson['cache'][hashItemA] = {};
+                            }
+                            falcorModelJson['cache'][hashItemA][hashItemB] = result; 
+                            references = findReferences(result, '$type');
+                            references
+                                .map(function(item){
+                                    hashLocationRef = item['value'][0] + ' ' + item['value'][1];
+                                    if(redisPathsSorted.indexOf(hashLocationRef) === -1){
+                                        fetchedAll = false;
+                                        refItterations++;
+                                        redisPathsSorted
+                                            .push(hashLocationRef);
+                                        redisPathsSorted
+                                            .map(redisRequest);
+                                        refItterations++;
+                                    } 
+                                });
+                            hashRequestCount++;
+                            if(hashRequestCount === redisPathsSorted.length || refItterations === maxRefItterations){
+                                if(fetchedAll === true){
+                                    //console.log( JSON.stringify(falcorModelJson));
+                                    callback(falcorModelJson);
+                                }
+                            }
                         });
         }
 
@@ -108,7 +138,7 @@ class FalcorIoredis {
             return a
                     .filter(function(x) {
                         return !seen.has(x) && seen.add(x);
-                    })
+                    });
         }
 
         function findElements(element){
