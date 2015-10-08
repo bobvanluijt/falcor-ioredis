@@ -5,35 +5,91 @@
  */
 
 /**
- * Prototype functions
+ * Global polyfills
  */
+if (!Object.assign) {
+    Object.defineProperty(Object, 'assign', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function(target) {
+            'use strict';
+            if (target === undefined || target === null) {
+                throw new TypeError('Cannot convert first argument to object');
+            }
 
-Array.prototype.diff = function(a) {
-    return this.filter(function(i) {return a.indexOf(i) < 0;});
-};
+            var to = Object(target);
+            for (var i = 1; i < arguments.length; i++) {
+                var nextSource = arguments[i];
+                if (nextSource === undefined || nextSource === null) {
+                  continue;
+                }
+                nextSource = Object(nextSource);
+
+                var keysArray = Object.keys(nextSource);
+                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                    var nextKey = keysArray[nextIndex];
+                    var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                    if (desc !== undefined && desc.enumerable) {
+                        to[nextKey] = nextSource[nextKey];
+                    }
+                }
+            }
+            return to;
+        }
+    });
+}
 
 /**
- * Variables
+ * Global variables
  */
-var Ioredis   = require('ioredis'),
-    jsonGraph = require('falcor-json-graph'),
-    falcor    = require('falcor'),
-    $ref      = jsonGraph
+var IOREDIS     = require('ioredis'),
+    JSONGRAPH   = require('falcor-json-graph'),
+    FALCOR      = require('falcor'),
+    $ref        = JSONGRAPH
                     .ref,
-    $error    = jsonGraph
+    $error      = JSONGRAPH
                     .error;
 
 class FalcorIoredis {
     
-    constructor(redisHost, pathString) {
+    constructor(redisHost, pathString, callback) {
 
         /**
          * Define variables
          */
-        var returnerAll = [],
-            returnerSorted,
-            i = 0,
-            firstElement;
+        var redisPathsAll   = [],
+            redisPathsSorted,
+            i               = 0,
+            firstElement,
+            redis           = new IOREDIS(redisHost),
+            falcorModelJson = {},
+            hashRequestCount= 0;
+
+        /**
+         * Define closures
+         */
+        function redisRequest(hashItem){
+            let hashItems = hashItem
+                                .split(' '),
+                hashItemA = hashItems[0],
+                hashItemB = hashItems[1];
+
+            return  redis
+                        .hget(hashItemA, hashItemB)
+                        .then(function(result){
+                            if(typeof falcorModelJson['cache'] === 'undefined') falcorModelJson['cache'] = {};
+                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined') falcorModelJson['cache'][hashItemA] = {};
+                            falcorModelJson['cache'][hashItemA][hashItemB] = JSON.parse(result);
+
+                            hashRequestCount++;
+
+                            if(hashRequestCount === redisPathsSorted.length){
+                                callback(falcorModelJson);
+                            }
+                            
+                        });
+        }
 
         function uniq(a) {
             var seen = new Set();
@@ -47,16 +103,16 @@ class FalcorIoredis {
             firstElement = element[0];
             if(typeof firstElement !== undefined){
                 if(typeof element[1] === 'object'){
-                    returnerAll[i] = firstElement + ' ';
+                    redisPathsAll[i] = firstElement + ' ';
                     element[1]
                         .forEach(function(element){
                             if(typeof element !== undefined){
-                                returnerAll[i] = firstElement + ' ' + element;
+                                redisPathsAll[i] = firstElement + ' ' + element;
                                 i++;
                             }
                         });
                 } else {
-                    returnerAll[i] = firstElement + ' ' + element[1];
+                    redisPathsAll[i] = firstElement + ' ' + element[1];
                 }
             }
             i++;
@@ -71,19 +127,24 @@ class FalcorIoredis {
             this.pathString = JSON.parse(pathString);
         }
 
+        /**
+         * Find redis paths
+         */
         this
             .pathString
             .forEach(findElements);
 
-        returnerSorted = uniq(returnerAll);
+        /**
+         * Make a unique array
+         */
+        redisPathsSorted = uniq(redisPathsAll);
 
-        console.log(returnerSorted);
-        console.log( '---' );
-
-        //return model.asDataSource();
-
+        /**
+         * Load data from redis and create model
+         */
+        redisPathsSorted
+                    .map(redisRequest);
     }
-
 }
 
 module.
