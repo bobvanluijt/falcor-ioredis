@@ -15,12 +15,12 @@ APP
         new FALCORIOREDIS('redis://localhost:6379', req, function(resultModel){
             var falcorModel = new FALCOR
                                     .Model(resultModel) ;
-            var outcome = FALCORSERVER
-                            .dataSourceRoute(function(req, res) {
-                                return  falcorModel
-                                            .asDataSource();
-                            });
-            outcome(req,res);
+            var dataSourceRoute = FALCORSERVER
+                                    .dataSourceRoute(function(req, res) {
+                                        return  falcorModel
+                                                    .asDataSource();
+                                    });
+            dataSourceRoute(req,res);
         });
     });
 
