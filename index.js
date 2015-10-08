@@ -8,35 +8,39 @@
  * Global polyfills
  */
 if (!Object.assign) {
-    Object.defineProperty(Object, 'assign', {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function(target) {
-            if (target === undefined || target === null) {
-                throw new TypeError('Cannot convert first argument to object');
-            }
-
-            var to = Object(target);
-            for (var i = 1; i < arguments.length; i++) {
-                var nextSource = arguments[i];
-                if (nextSource === undefined || nextSource === null) {
-                  continue;
+    Object
+        .defineProperty(Object, 'assign', {
+            enumerable: false,
+            configurable: true,
+            writable: true,
+            value: function(target) {
+                'use strict';
+                if (target === undefined || target === null) {
+                    throw new TypeError('Cannot convert first argument to object');
                 }
-                nextSource = Object(nextSource);
 
-                var keysArray = Object.keys(nextSource);
-                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-                    var nextKey = keysArray[nextIndex];
-                    var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-                    if (desc !== undefined && desc.enumerable) {
-                        to[nextKey] = nextSource[nextKey];
+                var to = Object(target);
+                for (var i = 1; i < arguments.length; i++) {
+                    var nextSource = arguments[i];
+                    if (nextSource === undefined || nextSource === null) {
+                      continue;
+                    }
+                    nextSource = Object(nextSource);
+
+                    var keysArray = Object
+                                        .keys(nextSource);
+                    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                        var nextKey = keysArray[nextIndex];
+                        var desc = Object
+                                    .getOwnPropertyDescriptor(nextSource, nextKey);
+                        if (desc !== undefined && desc.enumerable) {
+                            to[nextKey] = nextSource[nextKey];
+                        }
                     }
                 }
+                return to;
             }
-            return to;
-        }
-    });
+        });
 }
 
 /**
@@ -45,6 +49,7 @@ if (!Object.assign) {
 var IOREDIS     = require('ioredis'),
     JSONGRAPH   = require('falcor-json-graph'),
     FALCOR      = require('falcor'),
+    _           = require('underscore'),
     $ref        = JSONGRAPH
                     .ref,
     $error      = JSONGRAPH
@@ -68,6 +73,13 @@ class FalcorIoredis {
         /**
          * Define closures
          */
+        function findReferences(obj, key) {
+            if (_.has(obj, key)) return [obj];
+            return _.flatten(_.map(obj, function(v) {
+                return typeof v == "object" ? findReferences(v, key) : [];
+            }), true);
+        }
+
         function redisRequest(hashItem){
             let hashItems = hashItem
                                 .split(' '),
@@ -77,13 +89,10 @@ class FalcorIoredis {
             return  redis
                         .hget(hashItemA, hashItemB)
                         .then(function(result){
-                            if(typeof falcorModelJson['cache'] === 'undefined'){
-                                falcorModelJson['cache'] = {};
-                            }
-                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined'){
-                                falcorModelJson['cache'][hashItemA] = {};
-                            }
-                            falcorModelJson['cache'][hashItemA][hashItemB] = JSON.parse(result);
+                            if(typeof falcorModelJson['cache'] === 'undefined') falcorModelJson['cache'] = {};
+                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined') falcorModelJson['cache'][hashItemA] = {};
+                            falcorModelJson['cache'][hashItemA][hashItemB] = JSON
+                                                                                .parse(result);
 
                             hashRequestCount++;
 
@@ -97,9 +106,9 @@ class FalcorIoredis {
         function uniq(a) {
             var seen = new Set();
             return a
-                .filter(function(x) {
-                    return !seen.has(x) && seen.add(x);
-                });
+                    .filter(function(x) {
+                        return !seen.has(x) && seen.add(x);
+                    })
         }
 
         function findElements(element){
@@ -124,10 +133,11 @@ class FalcorIoredis {
         /**
          * EXEC
          */
-        if(pathString === undefined){
+        if(pathString.query.paths === undefined){
             return;
         } else {
-            this.pathString = JSON.parse(pathString);
+            this.pathString = JSON
+                                .parse(pathString.query.paths);
         }
 
         /**
