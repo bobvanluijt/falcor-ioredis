@@ -30,7 +30,7 @@ var EXPRESS         = require('express'),
 
 APP
     .use('/', function(req, res){
-        new FALCORIOREDIS('redis://localhost:6379', req, function(resultModel){
+        var falcorIoredis = new FALCORIOREDIS('redis://localhost:6379', req, function(resultModel){
             var falcorModel = new FALCOR
                                     .Model(resultModel) ;
             var dataSourceRoute = FALCORSERVER
