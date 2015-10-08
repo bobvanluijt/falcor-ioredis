@@ -103,11 +103,11 @@ class FalcorIoredis {
                         .then(function(result){
                             result = JSON.parse(result);
                             if(typeof falcorModelJson['cache'] === 'undefined'){
-                                falcorModelJson['cache'] = {}
-                            };
+                                falcorModelJson['cache'] = {};
+                            }
                             if(typeof falcorModelJson['cache'][hashItemA] === 'undefined'){
-                                falcorModelJson['cache'][hashItemA] = {}
-                            };
+                                falcorModelJson['cache'][hashItemA] = {};
+                            }
                             falcorModelJson['cache'][hashItemA][hashItemB] = result; 
                             references = findReferences(result, '$type');
                             references
