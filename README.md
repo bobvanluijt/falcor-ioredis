@@ -8,6 +8,9 @@ Falcor-ioredis is a simple piece of middleware that uses the Falcor-model to syn
 
 Useful links: [Falcor](http://netflix.github.io/falcor), [Ioredis](https://github.com/luin/ioredis)
 
+## Todo
+- Follow references in redis requests
+
 ## Installation
 
 ```bash
