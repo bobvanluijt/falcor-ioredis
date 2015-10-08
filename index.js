@@ -14,7 +14,6 @@ if (!Object.assign) {
             configurable: true,
             writable: true,
             value: function(target) {
-                'use strict';
                 if (target === undefined || target === null) {
                     throw new TypeError('Cannot convert first argument to object');
                 }
@@ -77,12 +76,15 @@ class FalcorIoredis {
          */
         function findReferences(obj, key) {
             let res = [];
-            if (_.has(obj, key)) return [obj];
+            if (_.has(obj, key)){
+                return [obj];
+            }
             _.forEach(obj, function(v) {
-                if (typeof v == "object" && (v = findReferences(v, key)).length)
+                if (typeof v === 'object' && (v = findReferences(v, key)).length){
                     res
                         .push
                         .apply(res, v);
+                }
             });
             return res;
         }
@@ -100,10 +102,14 @@ class FalcorIoredis {
                         .hget(hashItemA, hashItemB)
                         .then(function(result){
                             result = JSON.parse(result);
-                            if(typeof falcorModelJson['cache'] === 'undefined') falcorModelJson['cache'] = {};
-                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined') falcorModelJson['cache'][hashItemA] = {};
+                            if(typeof falcorModelJson['cache'] === 'undefined'){
+                                falcorModelJson['cache'] = {}
+                            };
+                            if(typeof falcorModelJson['cache'][hashItemA] === 'undefined'){
+                                falcorModelJson['cache'][hashItemA] = {}
+                            };
                             falcorModelJson['cache'][hashItemA][hashItemB] = result; 
-                            references = findReferences(result, "$type");
+                            references = findReferences(result, '$type');
                             references
                                 .map(function(item){
                                     hashLocationRef = item['value'][0] + ' ' + item['value'][1];
@@ -132,7 +138,7 @@ class FalcorIoredis {
             return a
                     .filter(function(x) {
                         return !seen.has(x) && seen.add(x);
-                    })
+                    });
         }
 
         function findElements(element){
