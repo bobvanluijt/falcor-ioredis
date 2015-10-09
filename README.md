@@ -42,7 +42,7 @@ APP
 var server = APP
                 .listen(8080, function(err) {
                     if (err) console.error(err);
-                    console.log('JSON graph available on http://localhost:80');
+                    console.log('JSON graph available on http://localhost:8080');
                 });
 ```
 
