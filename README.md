@@ -17,10 +17,7 @@ $ npm install falcor-ioredis
 
 ```js
 'use strict';
-/**
- * ELSIO CATALOG SERVER
- * Author: Bob van Luijt <bob.vanluijt@elsevier.io>
- */
+
 var EXPRESS         = require('express'),
     FALCORIOREDIS   = require('falcor-ioredis'),
     FALCORSERVER    = require('falcor-express'),
@@ -30,7 +27,7 @@ var EXPRESS         = require('express'),
 
 APP
     .use('/', function(req, res){
-        new FALCORIOREDIS('redis://localhost:6379', req, function(resultModel){
+        var falcorIoredis = new FALCORIOREDIS('redis://localhost:6379', req, function(resultModel){
             var falcorModel = new FALCOR
                                     .Model(resultModel) ;
             var dataSourceRoute = FALCORSERVER
