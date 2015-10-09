@@ -1,8 +1,5 @@
 'use strict';
-/**
- * ELSIO CATALOG SERVER
- * Author: Bob van Luijt <bob.vanluijt@elsevier.io>
- */
+
 var EXPRESS         = require('express'),
     FALCORIOREDIS   = require('falcor-ioredis'),
     FALCORSERVER    = require('falcor-express'),
