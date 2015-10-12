@@ -2,6 +2,7 @@
 
 [![NPM](https://img.shields.io/npm/v/falcor-ioredis.svg)](https://www.npmjs.com/package/falcor-ioredis)
 [![Build Status](https://travis-ci.org/kubrickology/falcor-ioredis.svg)](https://travis-ci.org/kubrickology/falcor-ioredis)
+[![bitHound Score](https://www.bithound.io/github/kubrickology/falcor-ioredis/badges/score.svg)](https://www.bithound.io/github/kubrickology/falcor-ioredis)
 
 ## What is this?
 Falcor-ioredis is a simple piece of middleware that uses the Falcor-model to sync with a JSON Graph stored in a Redis database. If references are found, redis will be queried automatically for the references.
